@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bricks preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=sentient@400,500&display=swap" />
+    <script>
+      // ?theme=dark previews dark; otherwise the saved choice, then the OS setting.
+      const q = new URLSearchParams(location.search).get("theme")
+      let saved = null
+      try { saved = localStorage.getItem("bricks-theme") } catch {}
+      const dark = q ? q === "dark" : saved ? saved === "dark" : matchMedia("(prefers-color-scheme: dark)").matches
+      document.documentElement.classList.toggle("dark", dark)
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
