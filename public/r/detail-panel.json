@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "detail-panel",
+  "title": "Details panel",
+  "description": "The 320px details panel on the right: title and icon actions on top, overlaying the content below lg.",
+  "dependencies": [
+    "@phosphor-icons/react@^2.1.10"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "registry/bricks/blocks/detail-panel.tsx",
+      "content": "\"use client\"\n\nimport type { ComponentProps, ReactNode } from \"react\"\nimport { XIcon } from \"@phosphor-icons/react\"\nimport { Button } from \"@/registry/bricks/ui/button\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\n\n/**\n * The 320px details panel on the right of the content. It sits beside the\n * content from `lg` and overlays it below, so the parent must be\n * `position: relative`.\n *\n * With a `title`, the top edge names the item (title, subtitle) and carries\n * its icon-only actions (`DetailAction`) on the right. Without one it's the\n * plain 40px \"Details\" bar, for empty and not-found states.\n *\n * `onClose` adds a close button, shown only while the panel overlays the\n * content (below `lg`); beside the content there's nothing to close.\n */\nexport function DetailPanel({\n  children,\n  onClose,\n  className,\n  title,\n  subtitle,\n  actions,\n  label = \"Details\",\n}: {\n  children: ReactNode\n  onClose?: () => void\n  className?: string\n  title?: ReactNode\n  subtitle?: ReactNode\n  /** Icon-only actions on the item (`DetailAction`), beside the title. */\n  actions?: ReactNode\n  /** The bar's label when there's no title. */\n  label?: string\n}) {\n  return (\n    <aside\n      className={cn(\n        \"absolute inset-y-0 right-0 z-10 flex w-full max-w-80 flex-col overflow-hidden border-l bg-background lg:static lg:z-auto lg:w-80 lg:shrink-0\",\n        className\n      )}\n    >\n      {title ? (\n        <div className=\"flex shrink-0 items-start gap-2 border-b py-3 pr-3 pl-5\">\n          <div className=\"flex min-w-0 flex-1 flex-col gap-0.5 py-0.5\">\n            <h2 className=\"truncate text-panel-title\">{title}</h2>\n            {subtitle ? (\n              <div className=\"truncate text-meta text-muted-foreground tabular-nums\">{subtitle}</div>\n            ) : null}\n          </div>\n          {actions || onClose ? (\n            <div className=\"flex shrink-0 items-center gap-0.5\">\n              {actions}\n              {onClose ? <CloseDetails onClose={onClose} className=\"lg:hidden\" /> : null}\n            </div>\n          ) : null}\n        </div>\n      ) : (\n        /* 40px, the same as a toolbar beside it, so the two rules line up. */\n        <div className=\"flex h-10 shrink-0 items-center justify-between border-b pr-2 pl-4\">\n          <span className=\"text-meta text-muted-foreground\">{label}</span>\n          {onClose ? <CloseDetails onClose={onClose} className=\"lg:hidden\" /> : null}\n        </div>\n      )}\n      {children}\n    </aside>\n  )\n}\n\nfunction CloseDetails({ onClose, className }: { onClose: () => void; className?: string }) {\n  return (\n    <Button variant=\"ghost\" size=\"icon-row\" className={className} aria-label=\"Close details\" onClick={onClose}>\n      <XIcon aria-hidden />\n    </Button>\n  )\n}\n\n/**\n * An icon-only action in the details header: Edit, Delete. Always neutral;\n * the red belongs to the confirm button in the dialog it opens.\n */\nexport function DetailAction({\n  label,\n  className,\n  ...props\n}: Omit<ComponentProps<typeof Button>, \"variant\" | \"size\"> & { label: string }) {\n  return (\n    <Button\n      variant=\"ghost\"\n      size=\"icon-row\"\n      className={className}\n      aria-label={label}\n      title={label}\n      {...props}\n    />\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

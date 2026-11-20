@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "state-message",
+  "title": "State message",
+  "description": "Empty, error and locked states: centred, a title, one line, at most one action.",
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/empty.json"
+  ],
+  "files": [
+    {
+      "path": "registry/bricks/blocks/state-message.tsx",
+      "content": "import type { ComponentType, ReactNode } from \"react\"\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@/registry/bricks/ui/empty\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\n\n/**\n * Empty, error and locked screens all share this shape: centred both ways,\n * a title, at most one short line, and at most one action (usually primary,\n * with no icon).\n *\n * Pass `icon` for a compact state (a 20px icon and a panel title), or `art`\n * for an illustrated one (your own 144px artwork, the display face and a\n * larger support line). Art replaces the icon.\n */\nexport function StateMessage({\n  icon: Icon,\n  art,\n  title,\n  body,\n  action,\n  className,\n}: {\n  icon?: ComponentType<{ className?: string; \"aria-hidden\"?: boolean }>\n  art?: ReactNode\n  title: string\n  body?: string\n  action?: ReactNode\n  className?: string\n}) {\n  return (\n    <Empty className={cn(\"mx-auto max-w-[720px] gap-3 p-6 md:p-8\", className)}>\n      <EmptyHeader className=\"gap-1\">\n        {art || Icon ? (\n          <EmptyMedia className=\"mb-1 text-muted-foreground\">\n            {art ? (\n              <div className=\"size-36 [&>*]:size-full\">{art}</div>\n            ) : Icon ? (\n              <Icon aria-hidden className=\"size-5\" />\n            ) : null}\n          </EmptyMedia>\n        ) : null}\n        <EmptyTitle className={art ? \"font-display text-page-title\" : \"text-panel-title\"}>\n          {title}\n        </EmptyTitle>\n        {body ? (\n          <EmptyDescription className={art ? \"text-[15px] leading-6 text-pretty\" : \"text-body text-pretty\"}>\n            {body}\n          </EmptyDescription>\n        ) : null}\n      </EmptyHeader>\n      {action ? <EmptyContent>{action}</EmptyContent> : null}\n    </Empty>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:component"
+}

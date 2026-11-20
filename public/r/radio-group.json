@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "title": "Radio group",
+  "description": "Radios whose checked dot is a thick ring.",
+  "dependencies": [
+    "radix-ui@^1.4.3"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/bricks/ui/radio-group.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { RadioGroup as RadioGroupPrimitive } from \"radix-ui\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\n\nfunction RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {\n  return <RadioGroupPrimitive.Root data-slot=\"radio-group\" className={cn(\"grid gap-1\", className)} {...props} />\n}\n\n// The checked dot is a thick ring rather than a nested circle.\nfunction RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {\n  return (\n    <RadioGroupPrimitive.Item\n      data-slot=\"radio-group-item\"\n      className={cn(\n        \"size-4 shrink-0 rounded-full border border-switch-edge bg-background outline-none transition-[border-width,border-color] duration-100 focus-visible:ring-2 focus-visible:ring-ring-control focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:border-border disabled:bg-muted data-[state=checked]:border-[5px] data-[state=checked]:border-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { RadioGroup, RadioGroupItem }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

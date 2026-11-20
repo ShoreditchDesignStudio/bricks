@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "title": "Dialog",
+  "description": "A centred modal with 20px padding, no close cross (every dialog ends in Cancel), scaling in from 97%.",
+  "dependencies": [
+    "radix-ui@^1.4.3",
+    "tw-animate-css"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/bricks/ui/dialog.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Dialog as DialogPrimitive } from \"radix-ui\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\n\n// shadcn's Dialog, trimmed: no close cross (every dialog\n// here ends in Cancel), and the information-block spacing (20px in, 20px apart).\n// Modals scale from the centre, not from a trigger; the exit is quicker than\n// the entry.\n\nfunction Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />\n}\n\nfunction DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />\n}\n\nfunction DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />\n}\n\nfunction DialogOverlay({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {\n  return (\n    <DialogPrimitive.Overlay\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-black/30 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:duration-200 dark:bg-black/60\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogContent({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Content>) {\n  return (\n    <DialogPrimitive.Portal>\n      <DialogOverlay />\n      {/*\n        Centred, so it scales from the centre: a modal has no trigger to grow\n        from. In from 97% and transparent, and out faster than in.\n      */}\n      <DialogPrimitive.Content\n        data-slot=\"dialog-content\"\n        className={cn(\n          \"fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-[440px] -translate-x-1/2 -translate-y-1/2 flex-col gap-5 rounded-lg border bg-popover p-5 text-popover-foreground shadow-md outline-none ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-[0.97] data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.97] data-[state=open]:duration-200 motion-reduce:data-[state=closed]:zoom-out-100 motion-reduce:data-[state=open]:zoom-in-100\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n      </DialogPrimitive.Content>\n    </DialogPrimitive.Portal>\n  )\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"dialog-header\" className={cn(\"flex flex-col gap-2\", className)} {...props} />\n}\n\nfunction DialogFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\"flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {\n  return (\n    <DialogPrimitive.Title\n      data-slot=\"dialog-title\"\n      className={cn(\"text-panel-title text-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Description>) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\"text-body text-pretty text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogTitle,\n  DialogTrigger,\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

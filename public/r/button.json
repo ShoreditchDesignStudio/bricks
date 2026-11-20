@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "title": "Button",
+  "description": "One 32px height for every action. Primary, outline, ghost and solid-red destructive, plus 28px and 24px icon sizes.",
+  "dependencies": [
+    "class-variance-authority@^0.7.1",
+    "radix-ui@^1.4.3"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/bricks/ui/button.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring-control focus-visible:ring-2 focus-visible:ring-ring-control focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        // Filled variants carry a transparent border so they line up exactly with outline ones.\n        default:\n          \"border border-transparent bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-pressed\",\n        // Solid red with white text, in both themes. Only for the action that deletes.\n        destructive:\n          \"border border-transparent bg-destructive-fill text-white hover:bg-destructive-fill-hover active:bg-destructive-fill-pressed\",\n        outline:\n          \"border border-input bg-button-outline hover:bg-accent hover:text-accent-foreground active:bg-row-pressed\",\n        secondary:\n          \"border border-transparent bg-secondary text-secondary-foreground hover:bg-row-pressed active:bg-row-pressed\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground active:bg-row-pressed\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      // One height everywhere: 32px, matching search fields, selects and the\n      // segmented control. `default` and `sm` are the same size, so a call site\n      // that leaves size out can't come out taller than its neighbours. `lg` is\n      // for a lone, full-width sign-in button only. Height is fixed (border-box, every variant\n      // carries or skips a 1px border inside it), so outline, filled and asChild\n      // links all measure the same. Don't override h-* or py-* at call sites.\n      size: {\n        default: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        // Icon-only buttons match the 32px row they sit in.\n        icon: \"size-8\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        // A 28px icon inside a 48px row, on a tile, or in the details header,\n        // where it's the only kind of button (RowAction, DetailAction).\n        \"icon-row\": \"size-7\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

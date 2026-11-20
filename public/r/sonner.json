@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sonner",
+  "title": "Toaster",
+  "description": "Sonner's toaster on Bricks' toast tokens and Phosphor icons. Needs next-themes, or pass theme yourself.",
+  "dependencies": [
+    "@phosphor-icons/react@^2.1.10",
+    "next-themes@^0.4.6",
+    "sonner@^2.0.8"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/bricks/ui/sonner.tsx",
+      "content": "\"use client\"\n\nimport { CheckCircleIcon, InfoIcon, SpinnerGapIcon, WarningIcon, XCircleIcon } from \"@phosphor-icons/react\";\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  // forcedTheme covers a theme forced on one page, which `theme` alone doesn't report.\n  const { forcedTheme, resolvedTheme = \"light\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={(forcedTheme ?? resolvedTheme) as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CheckCircleIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <WarningIcon className=\"size-4\" />,\n        error: <XCircleIcon className=\"size-4\" />,\n        loading: <SpinnerGapIcon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--toast)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--toast-border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

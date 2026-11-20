@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bricks",
+  "title": "Bricks",
+  "description": "Everything to start a Bricks project: the tokens, the cn() helper, and the core components (button, input, badge, segmented control, dialog, sheet, empty state, separator, tooltip).",
+  "dependencies": [
+    "tw-animate-css",
+    "@phosphor-icons/react@^2.1.10"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/button.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/input.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/badge.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/toggle-group.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/dialog.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/sheet.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/empty.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/separator.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/tooltip.json",
+    "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/skeleton.json"
+  ],
+  "docs": "Bricks expects Inter and Sentient. See https://github.com/ShoreditchDesignStudio/bricks#fonts to load them.",
+  "type": "registry:style"
+}
