@@ -11,7 +11,9 @@ import path from "node:path"
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..")
 const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"))
-const css = fs.readFileSync(path.join(root, "bricks.css"), "utf8")
+// The browser build only compiles what's in its style tags, so Tailwind itself
+// is imported here. Pages using bricks.js shouldn't import it again.
+const css = '@import "tailwindcss";\n\n' + fs.readFileSync(path.join(root, "bricks.css"), "utf8")
 
 const js = `/*! Bricks ${pkg.version} | MIT | https://github.com/ShoreditchDesignStudio/bricks */
 /* Generated from bricks.css by scripts/build-cdn.mjs. Don't edit by hand. */
