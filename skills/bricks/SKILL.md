@@ -1,11 +1,11 @@
 ---
 name: bricks
-description: Build a tool, internal app, prototype or artifact in Shoreditch Design's Bricks style (shadcn/ui on Bricks tokens - monochrome surfaces, one 4px radius, one 32px control height, Inter and Sentient, light and dark). Use when asked for something "in Bricks", "Bricks-style", "in the Hub style", or styled like Shoreditch Design's tools, in a repo or in a Claude.ai artifact.
+description: Build a tool, internal app, prototype or artifact in Shoreditch Design's Bricks style (shadcn/ui on Bricks tokens - cool grey surfaces, one 4px radius, one 32px control height, Inter and Sentient, light and dark). Use when asked for something "in Bricks", "Bricks-style", "in the Hub style", or styled like Shoreditch Design's tools, in a repo or in a Claude.ai artifact.
 ---
 
 # Building with Bricks
 
-Bricks is shadcn/ui with Shoreditch Design's tokens on top. The rules live in `DESIGN.md` at https://github.com/ShoreditchDesignStudio/bricks. Read it before you design a screen, and follow it over any habit of your own. If you can't fetch it, the essentials are below.
+Bricks is shadcn/ui with Shoreditch Design's tokens on top. This skill matches Bricks v0.2.0. The rules live in `DESIGN.md` at https://github.com/ShoreditchDesignStudio/bricks/blob/v0.2.0/DESIGN.md. Read it before you design a screen, and follow it over any habit of your own. If you can't fetch it, the essentials are below.
 
 ## Pick the route
 
@@ -32,25 +32,27 @@ npx shadcn@latest add https://raw.githubusercontent.com/ShoreditchDesignStudio/b
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.5"></script>
-<script src="https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@v0.1.0/bricks.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@v0.2.0/bricks.js"></script>
 ```
 
 - Put both in `<head>`, in that order. `bricks.js` compiles the Bricks tokens into the page and links Inter and Sentient. Don't add another `@import "tailwindcss"`.
-- Pin the tag. Never use `@main` (cached for hours).
+- Pin the tag (`@v0.2.0`). Never use `@main` (cached for hours).
 - Then write Tailwind classes against the tokens. The recipes below match the registry components exactly.
 - For dark mode, toggle `dark` on `<html>`.
 
 ## The rules that matter most
 
-- **Monochrome.** Ink on grey surfaces. The only colours: coral (`accent-brand`) for a selected card's ring and a field's focus edge, a rare peach chip, red for error text and for the one button that deletes.
-- **Tokens, never hex.** `bg-background`, `bg-card`, `bg-listing`, `bg-field`, `text-muted-foreground`, `border-border`. No `bg-white`, `bg-black`, `bg-[#...]`.
+- **Monochrome.** Ink on cool grey surfaces. The only colours: coral for the keyboard focus ring (`ring-ring-signature`) and the ring on the selected card or row (`ring-ring-selected`), a rare peach chip, red for error text and for the one button that deletes. Nothing else is coral: no coral hovers, links, icons or badges.
+- **Light is white content on a tinted page.** The listing (`bg-listing`) is tinted; rows, cards, fields and popovers on it are white, split by hairlines. Hover and selected on white are the faintest steps (`bg-row-group-hover`, `bg-row-group-selected`). Dark builds depth with steps instead: rows a step lighter than the surface.
+- **Tokens, never hex.** `bg-background`, `bg-card`, `bg-listing`, `bg-field`, `text-muted-foreground`, `border-border`. No `bg-white`, `bg-black`, `bg-[#...]`. Every grey comes off the two grey scales in `bricks.css` (`--grey-light-1` to `13`, `--grey-dark-1` to `12`) through a semantic token; in a repo, `node scripts/check-tokens.mjs` from the Bricks repo finds raw greys.
 - **One radius**, 4px (`rounded-md`). Row groups are the one exception, at 6px (`rounded-row-group`).
 - **One control height: 32px.** Buttons, selects, search fields and the segmented control are all `h-8`. Icon actions in rows and panel headers are 28px (`size-7`). Never put `h-*` or `py-*` on a Button.
 - **Type scale only:** `text-page-title` (with `font-display`), `text-panel-title`, `text-section`, `text-body`, `text-ui`, `text-meta`, `text-eyebrow`. `tabular-nums` for numbers.
+- **Sentient for names and numbers, never body or controls:** page titles (`font-display text-page-title`), details panel titles, item heads and icon state titles (`text-display-panel`), section headings on library and settings pages (`text-display-section`), big counts (`text-display-number`). The `text-display-*` utilities carry the family, so don't add `font-display`.
 - **Calls to action:** one primary per header, panel or state, and it sits last on the right. Secondary is `outline`; dense toolbars use `ghost`. Destructive (solid red) only on the confirm button in a dialog.
 - **Layout:** a page header (breadcrumb, display-face title, controls on the right), a `data-listing` content area on `bg-listing`, settings in a 288px left rail, details in a 320px right panel. Panels pad 20px and space groups 24px apart with a hairline between.
-- **Lists are row groups:** one bordered block, 48px rows split by a divider, column headers outside in `text-meta`. Never a card per row.
-- **States:** empty, error and locked screens are centred both ways, a title, at most one short line and one primary action with no icon. Errors read "Couldn’t load …" with **Try again**.
+- **Lists are row groups:** one bordered block, 48px rows split by a divider, column headers outside in `text-meta`. Never a card per row. The selected row adds the coral ring (`ring-1 ring-ring-selected ring-inset`). Grid tiles float on the listing: artwork in its well, title under it, no card fill, edge or shadow.
+- **States:** empty, error and locked screens are centred both ways, a title, at most one short line and one primary action with no icon. Errors read "Couldn’t load …" with **Try again**. An empty details panel shows Phosphor's `EmptyIcon` and "Nothing selected".
 - **Copy:** terse, British English, sentence case, curly apostrophes, buttons are verbs. Don't explain implementation.
 - **Check light and dark.**
 
@@ -77,10 +79,10 @@ These are what the registry components render, so artifact output matches repo o
 <button class="inline-flex h-8 items-center gap-1.5 rounded-md border border-input bg-button-outline px-3 text-sm font-medium hover:bg-accent active:bg-row-pressed">Add images</button>
 <button class="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover active:bg-primary-pressed">Download</button>
 <button class="inline-flex h-8 items-center gap-1.5 rounded-md border border-transparent bg-destructive-fill px-3 text-sm font-medium text-white hover:bg-destructive-fill-hover">Delete</button>
-<!-- Focus, on every button: focus-visible:ring-2 focus-visible:ring-ring-control focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none -->
+<!-- Focus, on every button (coral, keyboard only): focus-visible:ring-2 focus-visible:ring-ring-control focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none -->
 
-<!-- Text field: filled, no stroke, coral on focus -->
-<input class="h-8 w-64 rounded-md border border-transparent bg-field px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand" placeholder="Search">
+<!-- Text field: white with an edge in light, filled with no edge in dark, coral on focus -->
+<input class="h-8 w-64 rounded-md border border-field-edge bg-field px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring-signature focus-visible:ring-1 focus-visible:ring-ring-signature" placeholder="Search">
 
 <!-- Segmented control: 32px track, 24px thumbs -->
 <div class="inline-flex items-center gap-1 rounded-md bg-segment-track p-1 shadow-[inset_0_0_0_1px_var(--color-segment-track-edge)]">
@@ -98,20 +100,20 @@ These are what the registry components render, so artifact output matches repo o
   <div class="flex h-8 items-center gap-4 pl-[11px] pr-[7px] text-meta text-muted-foreground"><div class="flex-1">Name</div><div class="w-20">Size</div></div>
   <ul class="flex flex-col overflow-hidden rounded-row-group border border-row-group-edge bg-row-group">
     <li class="flex h-12 items-center gap-4 border-b border-row-group-divider pl-2.5 pr-1.5 tabular-nums last:border-b-0 hover:bg-row-group-hover"><div class="min-w-0 flex-1 truncate">Brand guidelines</div><div class="w-20 text-muted-foreground">4.2 MB</div></li>
-    <li class="flex h-12 items-center gap-4 border-b border-row-group-divider bg-row-group-selected pl-2.5 pr-1.5 last:border-b-0">…selected…</li>
+    <li class="flex h-12 items-center gap-4 border-b border-row-group-divider bg-row-group-selected pl-2.5 pr-1.5 ring-1 ring-ring-selected ring-inset last:border-b-0">…selected…</li>
   </ul>
 </section>
 
 <!-- Details panel, 320px on the right -->
 <aside class="flex w-80 shrink-0 flex-col border-l bg-background">
-  <div class="flex items-start gap-2 border-b py-3 pr-3 pl-5"><div class="min-w-0 flex-1"><h2 class="truncate text-panel-title">Homepage hero</h2><div class="text-meta text-muted-foreground">PNG · 1.1 MB</div></div></div>
+  <div class="flex items-start gap-6 border-b py-3 pr-3 pl-5"><div class="flex min-w-0 flex-1 flex-col gap-1.5 py-0.5"><h2 class="line-clamp-2 text-display-panel break-words">Homepage hero</h2><div class="truncate text-meta text-muted-foreground">PNG · 1.1 MB</div></div><!-- 28px icon actions --></div>
   <div class="flex-1 overflow-y-auto p-5"><!-- groups: border-t py-6, first without border --></div>
   <div class="flex flex-col gap-2 border-t p-5"><!-- outline, then primary, full width --></div>
 </aside>
 
 <!-- Empty state, centred in the content area -->
 <div class="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-  <h2 class="text-panel-title">No files yet</h2>
+  <h2 class="text-display-panel">No files yet</h2>
   <p class="text-body text-muted-foreground">Add files to see them here.</p>
   <button class="… primary button classes …">Add files</button>
 </div>
@@ -135,5 +137,6 @@ Fields inside a dialog, sheet or popover (`data-slot="dialog-content"` and frien
 
 - One primary per header, panel and state, last in its row.
 - Every control in a row is 32px; no stray `h-*` on buttons.
-- No hex colours in components; every new colour is a token with light and dark values.
+- No hex colours in components; every new colour is a token with light and dark values, and every grey comes off the scale.
+- Coral only on the focus ring and the selected item.
 - Looked at it in light and dark, and at a phone width.

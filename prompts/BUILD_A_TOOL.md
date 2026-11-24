@@ -13,17 +13,17 @@ Before you write any code, confirm three things with me: the tool’s name, a on
 Bricks is the Hub’s design system: shadcn/ui on the studio’s tokens. Use it for every part of the interface, and don’t hand-roll a component Bricks already has.
 
 - **In a Claude artifact:** load Tailwind’s browser build, then [cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@{{ref}}/bricks.js](https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@{{ref}}/bricks.js), both in the head.
-- **In a code project:** npx shadcn@latest add [raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/bricks.json](https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/bricks.json), then add other components by name from the registry.
-- Read the Bricks [DESIGN.md](https://github.com/ShoreditchDesignStudio/bricks/blob/main/DESIGN.md) and [SKILL.md](https://github.com/ShoreditchDesignStudio/bricks/blob/main/skills/bricks/SKILL.md) before you design a screen, and follow them over your own habits.
+- **In a code project:** npx shadcn@latest add [raw.githubusercontent.com/ShoreditchDesignStudio/bricks/{{ref}}/public/r/bricks.json](https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/{{ref}}/public/r/bricks.json), then add other components by name from the registry.
+- Read the Bricks [DESIGN.md](https://github.com/ShoreditchDesignStudio/bricks/blob/{{ref}}/DESIGN.md) and [SKILL.md](https://github.com/ShoreditchDesignStudio/bricks/blob/{{ref}}/skills/bricks/SKILL.md) before you design a screen, and follow them over your own habits.
 
 ## Design rules
 
 - **Tokens, never raw colours.** Use the Bricks utilities, such as bg-background, bg-listing, text-muted-foreground and border-border. No hex, rgb(), hsl() or oklch() values, and no bg-white or bg-black.
-- **Monochrome.** Ink on grey surfaces. Coral is only for the focus ring and a selected item; red is only for error text and a destructive confirm.
+- **Monochrome.** Ink on cool grey surfaces: in light, white rows, cards and fields on a tinted page. Coral is only for the focus ring and a selected item; red is only for error text and a destructive confirm.
 - **One control height: 32px.** Buttons, inputs, selects and segmented controls use the Bricks sizes. Never put h-, py- or size- classes on a Button.
 - **Calls to action.** One primary action per header, panel or state, placed last on the right. Secondary actions are outline; dense toolbars use ghost.
 - **Layout.** A page header with the title and its actions, content on the listing surface, settings in a left rail and details in a right panel, where the tool needs them.
-- **Type and shape.** The Bricks type scale only, tabular figures for numbers, and one 4px radius.
+- **Type and shape.** The Bricks type scale only, Sentient (the text-display-* sizes) for titles and big numbers but never body copy or controls, tabular figures for numbers, and one 4px radius.
 - **Light and dark.** Build in dark first, then check every screen in light.
 - **Copy.** British English, sentence case and short. Buttons are verbs. Don’t explain how the tool works under the hood.
 

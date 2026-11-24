@@ -1,6 +1,8 @@
 # Bricks
 
-Shoreditch Design's UI library. shadcn/ui under the hood, our tokens on top: quiet monochrome surfaces, one 4px radius, one 32px control height, Inter for the UI and Sentient for display, in light and dark.
+Shoreditch Design's UI library. shadcn/ui under the hood, our tokens on top: quiet cool-grey surfaces, one 4px radius, one 32px control height, Inter for the UI and Sentient for display, in light and dark.
+
+The current release is **v0.2.0**. It moves Bricks onto the Hub's greys: two tinted grey scales (13 light steps, 12 dark), white content on a tinted page in light, coral only for the focus ring and the selected row, Sentient display sizes for panel titles and counts, and `npm run check:tokens` so no raw grey gets back in.
 
 One source, three ways to use it:
 
@@ -61,7 +63,7 @@ The full list, with descriptions, is in [`registry.json`](registry.json).
 
 ### Pinning a version
 
-`main` always serves the latest build. To pin, swap `main` for a tag in the URL you add from (for example `.../bricks/v0.1.0/public/r/button.json`). Items point at their own dependencies on `main`, so a pinned item can still pull a newer `theme` or `utils`; re-run `add` with `--overwrite` when you upgrade.
+`main` always serves the latest build. To pin, swap `main` for a tag in the URL you add from (for example `.../bricks/v0.2.0/public/r/button.json`). Items point at their own dependencies on `main`, so a pinned item can still pull a newer `theme` or `utils`; re-run `add` with `--overwrite` when you upgrade.
 
 ## Use the CSS on its own
 
@@ -75,7 +77,7 @@ Copy `bricks.css` into your project (or install the package once it's published)
 @import "./bricks.css";
 ```
 
-You get every Bricks utility (`bg-primary-hover`, `bg-listing`, `text-panel-title`, `rounded-row-group`, `shadow-toast` and the rest) and the dark theme on `.dark`.
+You get every Bricks utility (`bg-primary-hover`, `bg-listing`, `text-panel-title`, `text-display-panel`, `ring-ring-selected`, `rounded-row-group`, `shadow-toast` and the rest) and the dark theme on `.dark`.
 
 ### From a CDN, with no build step
 
@@ -84,21 +86,21 @@ jsDelivr serves files straight from this GitHub repo. Pin a tag:
 ```html
 <!-- Tailwind's browser build, then Bricks. bricks.js adds bricks.css as a Tailwind stylesheet (with Tailwind's own import) and links the fonts. -->
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.5"></script>
-<script src="https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@v0.1.0/bricks.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@v0.2.0/bricks.js"></script>
 ```
 
 That's what a Claude.ai artifact or a CodePen should use. Write Tailwind classes against the Bricks tokens as usual. Don't add your own `@import "tailwindcss"`; `bricks.js` already does. Add `data-fonts="none"` to the script tag to skip the font links.
 
-Without Tailwind at all, link the CSS file. The browser ignores the `@theme` blocks and keeps the variables, the base type and colours, and the scoped rules, so `var(--primary)`, `var(--radius)` and friends work in your own CSS:
+Without Tailwind at all, link the CSS file. The browser ignores the `@theme` and `@utility` blocks and keeps the variables, the base type and colours, and the scoped rules, so `var(--primary)`, `var(--radius)` and friends work in your own CSS:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@v0.1.0/bricks.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@v0.2.0/bricks.css" />
 ```
 
 **jsDelivr limits worth knowing:**
 
 - Only public repos, and files up to 20 MB (Bricks' files are under 20 KB).
-- **Pin a tag (`@v0.1.0`) or a commit, not a branch.** Branch URLs (`@main`) are cached for up to 12 hours, so a push won’t show straight away. Tagged files are cached for good. Leaving the version out serves the newest tag.
+- **Pin a tag (`@v0.2.0`) or a commit, not a branch.** Branch URLs (`@main`) are cached for up to 12 hours, so a push won’t show straight away. Tagged files are cached for good. Leaving the version out serves the newest tag.
 - A stale branch URL can be purged at `https://purge.jsdelivr.net/gh/ShoreditchDesignStudio/bricks@main/bricks.css`.
 - jsDelivr is a free public CDN with no SLA. For production, self-host the file or install the package.
 - Tailwind's browser build compiles in the page. It's fine for prototypes and artifacts, not for production.
@@ -112,7 +114,7 @@ Bricks names two families and bundles neither.
 - Next.js: `next/font/google` with `Inter({ subsets: ["latin"], axes: ["opsz"], variable: "--font-inter" })`, and put `inter.variable` on `<html>`. Bricks reads `--font-inter` first.
 - Anywhere else: `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">`.
 
-**Sentient** (Fontshare, ITF Free Font License), for display (`font-display`: page titles, illustrated states). Link Fontshare's hosted CSS; don't commit or redistribute the font files.
+**Sentient** (Fontshare, ITF Free Font License), for display (`font-display` for page titles and illustrated states; `text-display-panel`, `text-display-section` and `text-display-number` for panel titles, section headings and big counts). Link Fontshare's hosted CSS; don't commit or redistribute the font files.
 
 ```html
 <link rel="preconnect" href="https://api.fontshare.com" />
@@ -125,7 +127,7 @@ Without the fonts, Bricks falls back to the system UI face and Georgia.
 ## Theming
 
 - **Dark mode** is a `dark` class on `<html>`. Set it in a tiny inline script before first paint to avoid a flash, or use `next-themes` with `attribute="class"`.
-- **Reskinning** means changing values in `:root` and `.dark`, never component code. Start with the base palette (`--ground`, `--surface`, `--nested`, `--row`, `--ink`, `--ink-secondary`, `--hairline`) and the semantic names follow.
+- **Reskinning** means changing values in `:root` and `.dark`, never component code. Every grey comes off the two grey scales (`--grey-light-1` to `13`, `--grey-dark-1` to `12`); retune those, or point the base palette (`--ground`, `--surface`, `--nested`, `--row`, `--ink`, `--ink-secondary`, `--hairline`) at other steps, and the semantic names follow.
 - **New colours** become tokens, with a light and a dark value, mapped in `@theme inline` so they get a utility.
 - The token roles and the rules for each are in [`DESIGN.md`](DESIGN.md).
 
@@ -135,6 +137,8 @@ Without the fonts, Bricks falls back to the system UI face and Georgia.
 npm install
 npm run build        # bricks.css -> registry.json -> public/r/*.json, and bricks.js
 npm run typecheck
+npm run check:tokens # no raw greys; the scales keep their steps, tint and order
+npm run check        # all of the above, and fails if the built files are stale
 npm run build:local  # a copy of the registry pointing at http://localhost:4455/r, in .local/
 ```
 
