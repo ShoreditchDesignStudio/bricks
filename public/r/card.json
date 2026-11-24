@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "card",
   "title": "Card",
-  "description": "shadcn's card on the nested fill and one radius.",
+  "description": "shadcn's card: white on the tinted page in light, the nested fill in dark, one radius.",
   "registryDependencies": [
     "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
     "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json"

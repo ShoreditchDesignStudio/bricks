@@ -1,6 +1,6 @@
 {
   "name": "@shoreditchdesign/bricks",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "Shoreditch Design's UI library: shadcn/ui under the hood, our tokens on top. A shadcn registry, a standalone CSS tokens file, and docs for humans and Claude.",
   "license": "MIT",
@@ -36,7 +36,8 @@
     "build": "node scripts/build.mjs && shadcn build && node scripts/build-cdn.mjs",
     "build:local": "node scripts/build-local.mjs",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run build && git diff --exit-code -- registry.json public/r bricks.js"
+    "check:tokens": "node scripts/check-tokens.mjs",
+    "check": "npm run check:tokens && npm run typecheck && npm run build && git diff --exit-code -- registry.json public/r bricks.js"
   },
   "devDependencies": {
     "@phosphor-icons/react": "^2.1.10",

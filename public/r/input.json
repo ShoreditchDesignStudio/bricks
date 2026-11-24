@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input",
   "title": "Input",
-  "description": "A filled text field with no stroke, and a coral edge on focus.",
+  "description": "A text field: white with an input edge in light, filled with no stroke in dark, and a coral edge on focus.",
   "registryDependencies": [
     "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/utils.json",
     "https://raw.githubusercontent.com/ShoreditchDesignStudio/bricks/main/public/r/theme.json"
@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "registry/bricks/ui/input.tsx",
-      "content": "import * as React from \"react\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-transparent bg-field px-3 py-1 text-base transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm\",\n        \"focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+      "content": "import * as React from \"react\"\nimport { cn } from \"@/registry/bricks/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-field-edge bg-field px-3 py-1 text-base transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm\",\n        \"focus-visible:border-ring-signature focus-visible:ring-1 focus-visible:ring-ring-signature\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
       "type": "registry:ui"
     }
   ],
