@@ -45,6 +45,8 @@ css.each((node) => {
   if (node.type === "atrule" && node.name === "theme") Object.assign(cssVars.theme, varsOf(node))
   else if (node.type === "atrule" && node.name === "custom-variant") return // shadcn init adds it
   else if (node.type === "atrule" && node.name === "layer") extraCss[`@layer ${node.params}`] = rulesOf(node)
+  else if (node.type === "atrule" && node.name === "utility") extraCss[`@utility ${node.params}`] = declsOf(node)
+  else if (node.type === "atrule") extraCss[`@${node.name} ${node.params}`] = rulesOf(node)
   else if (node.type === "rule" && node.selector === ":root") Object.assign(cssVars.light, varsOf(node))
   else if (node.type === "rule" && node.selector === ".dark") Object.assign(cssVars.dark, varsOf(node))
   else if (node.type === "rule") extraCss[node.selector.replace(/\s*,\s*\n?\s*/g, ", ")] = declsOf(node)
@@ -112,7 +114,7 @@ items.push({
   name: "theme",
   type: "registry:theme",
   title: "Bricks theme",
-  description: "Bricks' tokens: colours for light and dark, the type scale, one 4px radius, elevation, and the scoped rules for menus, dialogs and toasts.",
+  description: "Bricks' tokens: the light and dark grey scales and every colour on them, the type scale with the Sentient display sizes, one 4px radius, elevation, and the scoped rules for menus, dialogs, toasts and scrollbars.",
   cssVars,
   css: extraCss,
 })

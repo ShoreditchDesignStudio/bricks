@@ -3,7 +3,7 @@
  *
  * This file is the single source of truth. `npm run build` reads it into the
  * shadcn registry's theme item (public/r/theme.json), and into bricks.js for
- * pages with no build step.
+ * pages with no build step. `npm run check:tokens` keeps its greys on the scale.
  *
  * Use it in a Tailwind v4 project, after Tailwind itself:
  *
@@ -12,8 +12,8 @@
  *   @import "./bricks.css";
  *
  * Linked as a plain stylesheet, without Tailwind, the browser skips the
- * @theme blocks and keeps the variables, the base rules and the scoped rules,
- * so var(--primary) and friends still work.
+ * @theme and @utility blocks and keeps the variables, the base rules and the
+ * scoped rules, so var(--primary) and friends still work.
  *
  * Fonts: Inter (SIL Open Font License) for the UI and Sentient (Fontshare,
  * ITF Free Font License) for display. Neither is bundled; see README.md.
@@ -75,6 +75,38 @@
   --font-weight-semibold: 650;
 }
 
+/*
+ * Sentient beyond page titles: the display face in three set sizes, so a call
+ * site never pairs font-display with an ad-hoc size. Body and UI stay in Inter.
+ * - text-display-panel: details panel titles, item heads, icon state titles
+ * - text-display-section: section headings on library and settings pages
+ * - text-display-number: a big count, such as a library's total
+ */
+@utility text-display-panel {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+@utility text-display-section {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+@utility text-display-number {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
 @theme inline {
   /* --font-inter is what next/font sets; anywhere else the family name is used. */
   --font-sans: var(--font-inter, "Inter"), "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -119,8 +151,13 @@
   --color-surface-edge: var(--surface-edge);
   --color-listing: var(--listing);
   --color-field: var(--field);
+  --color-field-edge: var(--field-edge);
   --color-popover-field: var(--popover-field);
   --color-button-outline: var(--button-outline);
+  --color-signature: var(--signature);
+  --color-ring-signature: var(--ring-signature);
+  --color-ring-selected: var(--ring-selected);
+  --color-edge-strong: var(--edge-strong);
   --color-accent-brand: var(--accent-brand);
   --color-chip-peach: var(--chip-peach);
   --color-chip-peach-foreground: var(--chip-peach-foreground);
@@ -158,79 +195,164 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/*
+ * The grey scale: every grey in Bricks, light and dark, defined once.
+ * Semantic tokens below point at a step here and never carry a raw grey;
+ * scripts/check-tokens.mjs enforces it.
+ *
+ * Two scales, one per theme, each built for that theme's jobs. They don't
+ * mirror each other step for step, because the themes build depth differently:
+ *
+ *   Light: the page is tinted and content sits on white. Rows, cards, fields
+ *   and popovers are pure #ffffff, split by hairlines; hover and selected are
+ *   the faintest steps, a breath off white toward the page tint. Thirteen steps:
+ *     1 row, card hover on white     6 ground pressed, selected   11 hovered solid
+ *     2 row, card selected on white  7 hairline                   12 secondary text
+ *     3 page: listing, wells;        8 input, field edge          13 text
+ *       control hover on white       9 strong border
+ *     4 ground; control pressed     10 solid
+ *     5 ground hover; row divider
+ *
+ *   Dark: rows climb a step lighter than what's under them (the Radix model).
+ *     1 app background        5 pressed, selected     9 solid
+ *     2 subtle background     6 hairline              10 hovered solid
+ *     3 element, row          7 border, input         11 low-contrast text
+ *     4 hovered element       8 strong border         12 high-contrast text
+ *
+ * Semantic tokens name --grey-light-N on :root and --grey-dark-N under .dark,
+ * so every grey token is set in both blocks. The primary button's hover and
+ * pressed fills name the other theme's scale on purpose: the button is ink.
+ *
+ * The tint is one family in both, OKLCH hue ~248, but light carries about a
+ * third of dark's chroma: a tint reads far stronger at high lightness and next
+ * to pure white, so light's backgrounds sit at C 0.0017 and dark's at ~0.009.
+ *
+ * Not on the scale, on purpose: pure #ffffff and #000000, which stay pure
+ * (white is the light content surface), and the coral, peach and destructive
+ * red, which aren't greys.
+ */
+:root {
+  --grey-light-1: #f9fafb; /* L 0.985 C 0.0017  row, card hover on white */
+  --grey-light-2: #f5f6f7; /* L 0.973 C 0.0017  row, card selected on white */
+  --grey-light-3: #f1f2f3; /* L 0.961 C 0.0017  page: listing, wells; control hover */
+  --grey-light-4: #ecedee; /* L 0.946 C 0.0017  ground; control pressed */
+  --grey-light-5: #e4e5e6; /* L 0.921 C 0.0017  ground hover; row divider */
+  --grey-light-6: #dddedf; /* L 0.900 C 0.0017  ground pressed, selected */
+  --grey-light-7: #d9dadb; /* L 0.888 C 0.0018  hairline */
+  --grey-light-8: #d2d3d4; /* L 0.866 C 0.0018  input, field edge, surface edge */
+  --grey-light-9: #bcbec0; /* L 0.801 C 0.0036  strong border */
+  --grey-light-10: #a6a8aa; /* L 0.731 C 0.0037  solid */
+  --grey-light-11: #999b9d; /* L 0.688 C 0.0037  hovered solid */
+  --grey-light-12: #57595b; /* L 0.463 C 0.0041  secondary text */
+  --grey-light-13: #101214; /* L 0.181 C 0.0052  text */
+
+  --grey-dark-1: #0c0f13; /* L 0.167 C 0.0097  app background */
+  --grey-dark-2: #14171b; /* L 0.203 C 0.0093  subtle background */
+  --grey-dark-3: #1c1f23; /* L 0.238 C 0.0089  element, row */
+  --grey-dark-4: #23272b; /* L 0.270 C 0.0094  hovered element */
+  --grey-dark-5: #2f3337; /* L 0.319 C 0.0090  pressed, selected element */
+  --grey-dark-6: #3d4145; /* L 0.373 C 0.0087  hairline */
+  --grey-dark-7: #4f5357; /* L 0.440 C 0.0083  border, input */
+  --grey-dark-8: #5a5e63; /* L 0.480 C 0.0095  strong border */
+  --grey-dark-9: #71767b; /* L 0.563 C 0.0098  solid */
+  --grey-dark-10: #82878b; /* L 0.621 C 0.0085  hovered solid */
+  --grey-dark-11: #9fa4a9; /* L 0.716 C 0.0092  low-contrast text */
+  --grey-dark-12: #e0e5eb; /* L 0.920 C 0.0098  high-contrast text */
+}
+
 :root {
   --radius: 4px;
 
-  /* Base palette. A reskin changes these values only. */
-  --ground: #ededed;
+  /* Base palette. A reskin changes these values only. Pure white stays pure. */
+  --ground: var(--grey-light-4);
   --surface: #ffffff;
-  --nested: #f6f6f6;
-  --row: #eeeeee;
-  --ink: #121212;
+  --nested: var(--grey-light-3);
+  --row: var(--grey-light-3);
+  --ink: var(--grey-light-13);
   --ink-inverse: #ffffff;
-  --ink-secondary: #6a6a6a;
+  --ink-secondary: var(--grey-light-12);
 
   --popover-surface: #ffffff;
   /* The hover step on a menu. */
-  --popover-row: #eeeeee;
-  --hairline: #d9d9d9;
-  --ground-row: #e0e0e0;
-  --ground-pressed: #d4d4d4;
+  --popover-row: var(--grey-light-3);
+  --hairline: var(--grey-light-7);
+  --ground-row: var(--grey-light-5);
+  --ground-pressed: var(--grey-light-6);
 
   /*
    * State ladder, shared by every interactive surface:
    * rest, hover (--row or --ground-row), pressed (--row-pressed or --ground-pressed).
    * Selected rows sit on the hover step; selected controls sit on the pressed step.
    */
-  --row-pressed: #e0e0e0;
-  --primary-hover: #2e2e2e;
-  --primary-pressed: #444444;
+  --row-pressed: var(--grey-light-4);
+  /* The primary button is ink, so its hover and pressed fills come off the dark scale. */
+  --primary-hover: var(--grey-dark-5);
+  --primary-pressed: var(--grey-dark-6);
   /* The solid red behind destructive buttons, with white text on it (4.8:1). */
   --destructive-fill: #dc2626;
   --destructive-fill-hover: #c81e1e;
   --destructive-fill-pressed: #b31b1b;
-  /* Buttons and toggles stay monochrome in focus too. */
-  --ring-control: #6a6a6a;
 
-  /* Coral is the ring around a selected card (and the focus edge of a field), nothing else. */
-  --accent-brand: #ff6955;
+  /*
+   * Coral is the signature, and it's rare. It marks exactly two things: the
+   * keyboard focus ring and the ring around a selected card or row. Nothing
+   * else turns coral. Light uses the deeper coral so a 1-2px line clears 3:1
+   * on white and the listing; dark uses the brighter one.
+   */
+  --signature: #e8452c;
+  --ring-signature: var(--signature);
+  --ring-selected: var(--signature);
+  /* Focus rings everywhere, buttons and toggles included, are the signature. */
+  --ring-control: var(--ring-signature);
+  /* A firm monochrome edge that isn't focus: a selected swatch, a drop hint, a slider's hover halo. */
+  --edge-strong: var(--grey-light-12);
+  /* Kept as an alias for v0.1 call sites; it's the signature. */
+  --accent-brand: var(--signature);
 
   /* A rare peach chip. Text is darker than the tile so small sizes stay legible. */
   --chip-peach: #ffe6e0;
   --chip-peach-foreground: #c2341c;
 
-  /* Text fields: filled, no stroke. */
-  --field: #f0f0f0;
-  /* Fields on a dialog, sheet or popover. */
-  --popover-field: #f0f0f0;
+  /*
+   * Text fields. Light: white with an input edge, like every other piece of
+   * content on the tinted page. Dark: filled, no stroke.
+   */
+  --field: var(--surface);
+  --field-edge: var(--grey-light-8);
+  /* Fields on a dialog, sheet or popover. White in light, like every field. */
+  --popover-field: var(--surface);
   --button-outline: var(--surface);
 
   /* Segmented controls: a filled track and a stroked thumb with a soft lift. */
-  --segment-track: var(--field);
+  --segment-track: var(--grey-light-3);
   --segment-track-edge: transparent;
-  --segment-hover: #e6e6e6;
+  --segment-hover: var(--grey-light-4);
   --segment-thumb: #ffffff;
-  --segment-thumb-border: #d9d9d9;
+  --segment-thumb-border: var(--grey-light-7);
   --segment-thumb-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
   /* The edge of an unchecked switch, checkbox or radio: firmer than a hairline. */
-  --switch-edge: #bdbdbd;
+  --switch-edge: var(--grey-light-9);
 
-  /* The listing area under rows and tiles, and its row hover step. */
-  --listing: #f7f7f7;
-  --listing-row: #e9e9e9;
+  /*
+   * The listing: the tinted page under rows and tiles. Content on it is white,
+   * and its hover is the faintest step off white, the same tint as the page.
+   */
+  --listing: var(--grey-light-3);
+  --listing-row: var(--grey-light-1);
 
-  /* The page surface's edge against the ground: lighter than a hairline. */
-  --surface-edge: #d2d2d2;
+  /* The page surface's edge against the ground. */
+  --surface-edge: var(--grey-light-8);
 
   /*
    * Row groups: every list and table. Rows merge into one bordered block,
-   * split by a divider under each row.
+   * split by a divider under each row. Light rows are white on the tinted
+   * listing, edged with a hairline; hover and selected are a breath off white.
    */
-  --row-group: #efefef;
-  --row-group-hover: #e7e7e7;
-  --row-group-selected: #e0e0e0;
-  --row-group-edge: rgb(0 0 0 / 0.1);
-  --row-group-divider: rgb(0 0 0 / 0.07);
+  --row-group: var(--surface);
+  --row-group-hover: var(--grey-light-1);
+  --row-group-selected: var(--grey-light-2);
+  --row-group-edge: var(--hairline);
+  --row-group-divider: var(--grey-light-5);
   --row-group-radius: 6px;
 
   /* Tiles and the well their artwork sits in. */
@@ -258,7 +380,8 @@
   /* shadcn's semantic names, mapped onto the palette. */
   --background: var(--surface);
   --foreground: var(--ink);
-  --card: var(--nested);
+  /* Cards are white on the tinted page in light; dark keeps them on --nested. */
+  --card: var(--surface);
   --card-foreground: var(--ink);
   --popover: var(--popover-surface);
   --popover-foreground: var(--ink);
@@ -273,7 +396,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--hairline);
   --input: var(--hairline);
-  --ring: var(--ring-control);
+  --ring: var(--ring-signature);
 
   --sidebar: var(--ground);
   --sidebar-foreground: var(--ink);
@@ -282,32 +405,38 @@
   --sidebar-accent: var(--ground-row);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ground-pressed);
-  --sidebar-ring: var(--ring-control);
+  --sidebar-ring: var(--ring-signature);
 }
 
+/*
+ * Dark sets every grey token again, off the dark scale: the two scales don't
+ * share step numbers, so nothing on :root's light scale carries over.
+ */
 .dark {
-  --ground: #0f0f0f;
-  --surface: #171717;
-  --nested: #262626;
-  --row: #262626;
-  --ink: #e5e5e5;
-  --ink-inverse: #171717;
-  --ink-secondary: #a3a3a3;
+  --ground: var(--grey-dark-1);
+  --surface: var(--grey-dark-2);
+  --nested: var(--grey-dark-4);
+  --row: var(--grey-dark-4);
+  --ink: var(--grey-dark-12);
+  --ink-inverse: var(--grey-dark-2);
+  --ink-secondary: var(--grey-dark-11);
 
-  --popover-surface: #262626;
-  --popover-row: #333333;
-  --hairline: #404040;
-  --ground-row: #262626;
-  --ground-pressed: #333333;
+  --popover-surface: var(--grey-dark-4);
+  --popover-row: var(--grey-dark-5);
+  --hairline: var(--grey-dark-6);
+  --ground-row: var(--grey-dark-4);
+  --ground-pressed: var(--grey-dark-5);
 
-  --row-pressed: #333333;
-  --primary-hover: #d4d4d4;
-  --primary-pressed: #c2c2c2;
+  --row-pressed: var(--grey-dark-5);
+  /* Dark's primary is light ink, so its hover and pressed fills come off the light scale. */
+  --primary-hover: var(--grey-light-8);
+  --primary-pressed: var(--grey-light-9);
   /* The same red as light, stepping lighter on hover so it lifts off the dark surface. */
   --destructive-fill: #dc2626;
   --destructive-fill-hover: #e43c3c;
   --destructive-fill-pressed: #ea5252;
-  --ring-control: #a3a3a3;
+  --signature: #ff6955;
+  --edge-strong: var(--grey-dark-11);
 
   --chip-peach: #3d221e;
   --chip-peach-foreground: #ff8b78;
@@ -315,35 +444,37 @@
   /* Light's red is only 3.8:1 on the dark surface; this is 6.2:1 on --surface. */
   --destructive: #ff6467;
 
-  --field: #262626;
+  --field: var(--grey-dark-4);
+  --field-edge: transparent;
   /* Dark --field matches --popover-surface, so fields there lift one step. */
-  --popover-field: #333333;
-  --button-outline: #0a0a0a;
+  --popover-field: var(--grey-dark-5);
+  --button-outline: var(--grey-dark-1);
   /*
    * Dark sinks the segment track below the surface, with a hairline so it
    * doesn't vanish, and the thumb is the one raised step, lit along its top.
    */
   --segment-track: var(--ground);
   --segment-track-edge: var(--row);
-  --segment-hover: #1f1f1f;
-  --segment-thumb: #2e2e2e;
-  --segment-thumb-border: #404040;
+  --segment-hover: var(--grey-dark-3);
+  --segment-thumb: var(--grey-dark-5);
+  --segment-thumb-border: var(--grey-dark-6);
   --segment-thumb-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
-  --switch-edge: #5c5c5c;
+  --switch-edge: var(--grey-dark-8);
   --listing: var(--surface);
-  --listing-row: var(--row);
+  --listing-row: var(--grey-dark-4);
   --surface-edge: var(--hairline);
-  /* One step off the listing; edges are white at low alpha so they ride every step. */
-  --row-group: #1f1f1f;
-  --row-group-hover: var(--row);
-  --row-group-selected: var(--row-pressed);
+  /* Rows climb a step lighter than the surface; edges are white at low alpha so they ride every step. */
+  --row-group: var(--grey-dark-3);
+  --row-group-hover: var(--grey-dark-4);
+  --row-group-selected: var(--grey-dark-5);
   --row-group-edge: rgb(255 255 255 / 0.13);
   --row-group-divider: rgb(255 255 255 / 0.12);
   --tile-border: transparent;
+  /* Darker than any tile state, with a lighter edge, so hover never swallows it. */
   --thumb: var(--ground);
   --thumb-edge: var(--hairline);
   /* Outline buttons sit on near-black, so their edge needs more lift. */
-  --input: #525252;
+  --input: var(--grey-dark-7);
 
   /* Dark keeps simpler shadows, and none on tiles. */
   --elevation-surface: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -377,7 +508,7 @@
   --accent: var(--row);
   --accent-foreground: var(--ink);
   --border: var(--hairline);
-  --ring: var(--ring-control);
+  --ring: var(--ring-signature);
 
   --sidebar: var(--ground);
   --sidebar-foreground: var(--ink);
@@ -386,7 +517,7 @@
   --sidebar-accent: var(--ground-row);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ground-pressed);
-  --sidebar-ring: var(--ring-control);
+  --sidebar-ring: var(--ring-signature);
 }
 
 /* Plain CSS, no @apply, so these also work when the file is linked without Tailwind. */
@@ -399,6 +530,8 @@
   html {
     /* Forces Inter's display cut; without it small sizes use the text cut. */
     font-variation-settings: "opsz" 32;
+    /* Native scrollbars take the tinted greys, so they match the surfaces they sit on. */
+    scrollbar-color: var(--input) transparent;
   }
 
   body {
@@ -460,4 +593,35 @@
  */
 [data-sonner-toaster] [data-sonner-toast]:not([data-visible="false"]) {
   pointer-events: auto;
+}
+
+/*
+ * A scrollbar that stays visible, for a box that scrolls inside a page, where
+ * macOS's overlay scrollbars would hide that there's more. Chrome only draws
+ * the ::-webkit-scrollbar parts when scrollbar-color is auto, so the inherited
+ * colour is reset here; Firefox keeps the native one.
+ */
+.scrollbar-visible {
+  scrollbar-color: auto;
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+  width: 12px;
+  background: transparent;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  background: var(--input) padding-box;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+  background-color: var(--edge-strong);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scrollbar-visible {
+    scrollbar-color: var(--input) transparent;
+  }
 }
