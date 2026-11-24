@@ -55,6 +55,8 @@ export const ROW = cn(
   ROW_INSET
 )
 export const ROW_SELECTED = "bg-row-group-selected hover:bg-row-group-selected"
+// The signature ring on the one selected card or row (a details panel is open on it).
+export const SELECTED_RING = "ring-1 ring-ring-selected ring-inset"
 // Headers sit outside the block, so they take its 1px edge on too and line up with row text.
 export const HEADER_INSET = "pl-[11px] pr-[7px]"
 
@@ -145,7 +147,7 @@ export function DataRows<Row extends { id: string }>({
               className={cn(
                 "group/row relative flex h-12 items-center gap-4 tabular-nums has-[a:active]:bg-row-group-selected has-[>button:active]:bg-row-group-selected",
                 ROW,
-                selected && ROW_SELECTED
+                selected && [ROW_SELECTED, SELECTED_RING]
               )}
               data-selected={selected ? "true" : undefined}
             >
