@@ -14,7 +14,7 @@ import { cn } from "@/registry/bricks/lib/utils"
  * a title, at most one short line, and at most one action (usually primary,
  * with no icon).
  *
- * Pass `icon` for a compact state (a 20px icon and a panel title), or `art`
+ * Pass `icon` for a compact state (a 20px icon and a Sentient panel title), or `art`
  * for an illustrated one (your own 144px artwork, the display face and a
  * larger support line). Art replaces the icon.
  */
@@ -45,7 +45,8 @@ export function StateMessage({
             ) : null}
           </EmptyMedia>
         ) : null}
-        <EmptyTitle className={art ? "font-display text-page-title" : "text-panel-title"}>
+        {/* Both set titles in Sentient: illustrated states at page-title size with larger copy, compact ones at panel size. */}
+        <EmptyTitle className={art ? "font-display text-page-title" : "text-display-panel"}>
           {title}
         </EmptyTitle>
         {body ? (

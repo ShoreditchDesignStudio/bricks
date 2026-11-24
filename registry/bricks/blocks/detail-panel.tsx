@@ -44,9 +44,9 @@ export function DetailPanel({
       )}
     >
       {title ? (
-        <div className="flex shrink-0 items-start gap-2 border-b py-3 pr-3 pl-5">
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5 py-0.5">
-            <h2 className="truncate text-panel-title">{title}</h2>
+        <div className="flex shrink-0 items-start gap-6 border-b py-3 pr-3 pl-5">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5 py-0.5">
+            <h2 className="line-clamp-2 text-display-panel break-words">{title}</h2>
             {subtitle ? (
               <div className="truncate text-meta text-muted-foreground tabular-nums">{subtitle}</div>
             ) : null}

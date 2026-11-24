@@ -28,7 +28,7 @@ function Slider({ className, ...props }: React.ComponentProps<typeof SliderPrimi
         <SliderPrimitive.Thumb
           key={index}
           data-slot="slider-thumb"
-          className="block size-3.5 shrink-0 rounded-full border border-primary bg-background shadow-sm transition-[box-shadow] outline-none hover:ring-4 hover:ring-ring-control/15 focus-visible:ring-2 focus-visible:ring-ring-control focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="block size-3.5 shrink-0 rounded-full border border-primary bg-background shadow-sm transition-[box-shadow] outline-none hover:ring-4 hover:ring-edge-strong/15 focus-visible:ring-2 focus-visible:ring-ring-control focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         />
       ))}
     </SliderPrimitive.Root>

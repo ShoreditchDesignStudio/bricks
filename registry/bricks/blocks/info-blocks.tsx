@@ -69,7 +69,7 @@ export function MediaHead({
     <div className="flex flex-col gap-4">
       {media}
       <div className="flex flex-col gap-2">
-        <h2 className="text-panel-title">{title}</h2>
+        <h2 className="text-display-panel">{title}</h2>
         <div className="text-meta text-muted-foreground tabular-nums">{support}</div>
       </div>
     </div>
